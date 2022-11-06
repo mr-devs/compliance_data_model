@@ -57,15 +57,14 @@ With everything imported, we can now read a file like
 import gzip
 import json
 
-file_name = XXXXXXX.json.gz
+file_name = "XXXXXXX.json.gz"
 
 # Read the first compliance message
 with gzip.open(file_name, "rb") as f:
     for line in f:
-
         # This will be a dictionary
         comp_msg = json.loads(line.decode())
-        break
+        break # We only want the first tweet for this example
 ```
 
 Then you can initialize a `ComplianceBase` class like.
