@@ -26,32 +26,37 @@ USER_ACTIONS = set(
 TWEET_ACTIONS = set(["delete", "tweet_edit", "status_withheld"])
 DROP_ACTIONS = set(["drop", "undrop"])
 GEO_ACTIONS = set(["scrub_geo"])
+LIKE_ACTIONS = set(["delete"])
 
-# Static methods go here
+# Static methods
 # --------------------
 def return_possible_actions(action_class):
     """
-    Return all possible types of compliance messages for the specified type.
+    Return a set of all possible types of compliance messages for the specified type.
 
     Parameters:
     -----------
     - action_class (str): the class of compliance messages to return
-        Options: ['user', 'tweet', 'drop', 'scrub_geo']
+        Options: ['user', 'tweet', 'drop', 'scrub_geo', 'like']
     """
-    options = ["user", "tweet", "drop", "scrub_geo"]
+    options = ["user", "tweet", "drop", "scrub_geo", "like"]
     if action_class not in options:
         raise TypeError(f"`action_class` must be one of: {options}")
 
     if action_class == "user":
         return USER_ACTIONS
-    if action_class == "tweet":
+    elif action_class == "tweet":
         return TWEET_ACTIONS
-    if action_class == "drop":
+    elif action_class == "drop":
         return DROP_ACTIONS
-    if action_class == "geo":
+    elif action_class == "scrub_geo":
         return GEO_ACTIONS
+    elif action_class == "like":
+        return LIKE_ACTIONS
 
 
+# Base class
+# --------------------
 class ComplianceBase:
     """
     Base class for compliance data objects. Utilized to distinguish different
@@ -74,6 +79,7 @@ class ComplianceBase:
         self.is_tweet_action = True if self.action in TWEET_ACTIONS else False
         self.is_drop_action = True if self.action in DROP_ACTIONS else False
         self.is_geo_action = True if self.action in GEO_ACTIONS else False
+        self.is_like_action = True if self.action in LIKE_ACTIONS else False
 
         # Throw error if unknown action encountered
         all_action_flags = [
@@ -81,6 +87,7 @@ class ComplianceBase:
             self.is_tweet_action,
             self.is_drop_action,
             self.is_geo_action,
+            self.is_like_action,
         ]
         if sum(all_action_flags) != 1:
             raise TypeError(
@@ -90,11 +97,11 @@ class ComplianceBase:
 
     def get_value(self, key_list: list = []):
         """
-        Return the dictionary value to return from the compliance data object
-        with `key_list`. From left to right, each string in the key_list
+        Return a dictionary value from the compliance data object with `key_list`.
+        From left to right, each string in the key_list
         indicates another nested level further down in the dictionary.
-        After following the indicated `key_list` path, if no value is present,
-        `None` is returned.
+        If no value is present after reaching the end of the indicated `key_list`
+        path, `None` is returned.
 
         Parameters:
         ----------
@@ -172,6 +179,8 @@ class ComplianceBase:
         )
 
 
+# Action message classes
+# --------------------
 class TweetAction(ComplianceBase):
     """
     Class to handle compliance tweet objects.
@@ -354,7 +363,7 @@ class DropAction(ComplianceBase):
     def __init__(self, drop_action):
         """
         This function initializes the instance by binding the comp_object to
-        the UserAction class.
+        the DropAction class.
 
         Parameters:
         -----------
@@ -411,7 +420,7 @@ class ScrubGeoAction(ComplianceBase):
     def __init__(self, geo_action):
         """
         This function initializes the instance by binding the comp_object to
-        the UserAction class.
+        the ScrubGeoAction class.
 
         Parameters:
         -----------
@@ -427,7 +436,7 @@ class ScrubGeoAction(ComplianceBase):
 
         if not self.is_geo_action:
             raise TypeError(
-                "ComplianceBase does not contain a drop action!\n"
+                "ComplianceBase does not contain a scrub geo action!\n"
                 f"ComplianceBase Action: {self.action}"
                 f"ComplianceBase Object:\n{self.comp_object}"
             )
@@ -443,3 +452,45 @@ class ScrubGeoAction(ComplianceBase):
         Return the up_to_status_id (str) of the action object.
         """
         return self.get_value([self.action, "up_to_status_id_str"])
+
+
+class DeleteLikeAction(ComplianceBase):
+    """
+    Class to handle compliance delete like actions.
+    """
+
+    def __init__(self, like_action):
+        """
+        This function initializes the instance by binding the comp_object to
+        the DeleteLikeAction class.
+
+        Parameters:
+        -----------
+        - like_action (ComplianceBase, dict): the compliance base object or the
+            JSON object from the compliance firehose
+        """
+        if isinstance(like_action, ComplianceBase):
+            super().__init__(like_action.comp_object)
+        elif isinstance(like_action, dict):
+            super().__init__(like_action)
+        else:
+            TypeError("`like_action` type must be one of: [ComplianceBase, dict]")
+
+        if not self.is_like_action:
+            raise TypeError(
+                "ComplianceBase does not contain a like action!\n"
+                f"ComplianceBase Action: {self.action}"
+                f"ComplianceBase Object:\n{self.comp_object}"
+            )
+
+    def get_tweet_id(self):
+        """
+        Return the tweet ID (str) of the action object.
+        """
+        return self.get_value([self.action, "favorite", "tweet_id_str"])
+
+    def get_user_id(self):
+        """
+        Return the user ID (str) of the action object.
+        """
+        return self.get_value([self.action, "favorite", "user_id_str"])
