@@ -5,7 +5,7 @@ This repo contains a small package called `compliance_pkg` for handling Twitter'
 ### Installing
 From you terminal run
 ```sh
-git clone <repo clone link goes here>
+git clone git@github.com:mr-devs/compliance_data_model.git
 ```
 
 Then run
