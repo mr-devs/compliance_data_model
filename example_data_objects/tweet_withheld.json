@@ -1,0 +1,14 @@
+{
+    "status_withheld": {
+        "status": {
+            "id": 601430178305220600,
+            "id_str": "601430178305220608",
+            "user_id": 3198576760,
+            "user_id_str": "3198576760"
+        },
+        "withheld_in_countries": [
+            "XY"
+        ],
+        "timestamp_ms": "1432228155593"
+    }
+}

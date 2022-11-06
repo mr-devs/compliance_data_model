@@ -1,0 +1,12 @@
+{
+    "user_withheld": {
+        "user": {
+            "id": 1375036644,
+            "id_str": "1375036644"
+        },
+        "withheld_in_countries": [
+            "XY"
+        ],
+        "timestampMs": "2014-08-27T23:49:41.839+00:00"
+    }
+}
