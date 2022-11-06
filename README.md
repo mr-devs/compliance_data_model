@@ -27,7 +27,9 @@ First, import all that the package has to offer (there isn't too much).
 from compliance_pkg import *
 ```
 
-There is one convenience function, one base data class and then a class object for each of the specific types of action messages that Twitter sends through the compliance firehose. Here is a list of everything:
+There is one convenience function, one base data class, and a class object for each of the specific types of action messages that Twitter sends through the compliance firehose.
+
+Here is a list of everything:
 - `return_possible_actions` : the convenience function. Pass one of `['user', 'tweet', 'drop', 'scrub_geo']` to return a set of the types of action messages parsed by the related class object
 - `ComplianceBase` : the base data class. All data objects must first pass through this. It's main purpose is to distinguish different types of compliance objects from one another.
 - `TweetAction` : handles action messages related to tweets. E.g., delete tweet, tweet edit, etc.
