@@ -20,6 +20,20 @@ You can check this was successful by then running
 pip show compliance_pkg
 ```
 
+If successful, it will show something like
+```
+Name: compliance-pkg
+Version: 0.1
+Summary: Package for working with Twitter's compliance firehose data
+Home-page: None
+Author: Matthew DeVerna
+Author-email: None
+License: None
+Location: /path1/path2/path3/compliance_data_model/package
+Requires:
+Required-by:
+```
+
 ### Usage
 
 First, import all that the package has to offer (there isn't too much).
