@@ -92,7 +92,7 @@ elif self.is_tweet_action:
 else:
     action_obj = UserAction(comp_obj)
 ```
-> Note: All of these functions can also read the raw compliance message dictionary. I.e., `DropAction(comp_obj) == DropAction(comp_obj.comp_object)`
+> Note: These four classes can also read the raw compliance message dictionary. I.e., `DropAction(comp_obj) == DropAction(comp_obj.comp_object)`
 
 With the specific data object parsed, you can then access all fields within the dictionary with the methods.
 
