@@ -2,6 +2,8 @@
 
 This repo contains a small package called `compliance_pkg` for handling Twitter's compliance firehose data objects.
 
+- [Twitter Reference Documentation](https://developer.twitter.com/en/docs/twitter-api/enterprise/compliance-firehose-api/guides/compliance-data-objects)
+
 ### Installing
 From you terminal run
 ```sh
